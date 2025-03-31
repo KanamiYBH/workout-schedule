@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
-import FormField from "../../Fragments/formField";
-import Button from "../../Elements/button";
-import { useWorkoutsContext } from "../../../hooks/useWorkoutsContext";
-import axios from "axios";
 import { useState } from "react";
+import { useWorkoutsContext } from "@hooks/useWorkoutsContext";
+
+import FormField from "@components/Fragments/formField";
+import Button from "@components/Elements/button";
+import addWorkout from "@api/workouts/addWorkout";
 
 export default function AddScheduleForm() {
   const { dispatch } = useWorkoutsContext();
@@ -18,22 +19,17 @@ export default function AddScheduleForm() {
 
     const workout = { title, reps, load };
 
-    try {
-      const response = await axios.post('http://localhost:4000/api/workouts', workout);
-      const data = response.data;
+    const data = await addWorkout(workout);
 
-      if (data.error) {
-        setError(data.error);
-      } else {
-        setTitle('');
-        setReps('');
-        setLoad('');
-        setError(null);
-        dispatch({ type: 'CREATE_WORKOUT', payload: data });
-      }
-    } catch (err) {
-      setError(err.response?.data?.error || "Something went wrong");
+    if (data.error) {
+      return setError(data.error);
     }
+    
+    setTitle('');
+    setReps('');
+    setLoad('');
+    setError(null);
+    dispatch({ type: 'CREATE_WORKOUT', payload: data });
   };
 
 

@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useWorkoutsContext } from "@hooks/useWorkoutsContext";
 
+import getWorkout from "@api/workouts/getWorkout";
+import updateWorkout from "@api/workouts/updateWorkout";
 import FormField from "@components/Fragments/formField";
 import Button from "@components/Elements/button";
 
@@ -17,11 +18,9 @@ export default function EditScheduleForm({ id }) {
 
   useEffect(() => {
     const fetchWorkout = async (id) => {
-      const response = await axios.get(`http://localhost:4000/api/workouts/${id}`);
-      const data = response.data;
+      const data = await getWorkout(id);
 
-      if (data) {
-        console.log(data)
+      if (!data.error) {
         setTitle(data.title);
         setReps(data.reps);
         setLoad(data.load);
@@ -42,8 +41,7 @@ export default function EditScheduleForm({ id }) {
     const workout = { title, reps, load };
 
     try {
-      const response = await axios.patch(`http://localhost:4000/api/workouts/${id}`, workout);
-      const data = response.data;
+      const data = await updateWorkout(id, workout)
 
       if (data.error) {
         setError(data.error);
@@ -52,7 +50,6 @@ export default function EditScheduleForm({ id }) {
         dispatch({ type: 'UPDATE_WORKOUT', payload: data });
       }
     } catch (err) {
-      // Improved error handling
       if (err.response) {
         setError(err.response?.data?.error || "Something went wrong with the server");
       } else if (err.request) {

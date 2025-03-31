@@ -1,22 +1,21 @@
 /* eslint-disable react/prop-types */
-import axios from "axios";
-import { useWorkoutsContext } from "../../../hooks/useWorkoutsContext";
-import Button from "../../Elements/button";
 import { useState } from "react";
+import { useWorkoutsContext } from "../../../hooks/useWorkoutsContext";
+
 import { Link } from "react-router";
+import deleteWorkout from "@api/workouts/deleteWorkout";
+import Button from "@components/Elements/button";
 
 export default function ListItem({ id, title, load, reps }) {
   const { dispatch } = useWorkoutsContext();
   const [error, setError] = useState(null);
 
   const handleDelete = async () => {
-    const response = await axios.delete(`http://localhost:4000/api/workouts/${id}`);
-    const data = response.data;
+    const data = await deleteWorkout(id);
 
     if (data.error) {
       return setError(data.error);
     }
-
     dispatch({ type: 'DELETE_WORKOUT', payload: data });
   }
 

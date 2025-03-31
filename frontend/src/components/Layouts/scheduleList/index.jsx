@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import ListItem from "../../Fragments/listItems";
+import ListItem from "@components/Fragments/listItems";
 
 export default function ScheduleList({ items }) {
   return (

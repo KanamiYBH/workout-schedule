@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import Label from "../../Elements/label";
-import Input from "../../Elements/input";
+import Label from "@components/Elements/label";
+import Input from "@components/Elements/input";
 
 export default function FormField({ label, id, type, placeholder, ...props }) {
   return (

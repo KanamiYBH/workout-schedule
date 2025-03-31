@@ -1,12 +1,12 @@
 // Import library
-import axios from 'axios';
 import { useEffect } from "react";
 import { useWorkoutsContext } from "@hooks/useWorkoutsContext";
-import { Link, useParams } from 'react-router';
 
 // Import Components
+import { Link, useParams } from 'react-router';
 import ScheduleList from "@components/Layouts/scheduleList";
 import EditScheduleForm from '@components/Layouts/editScheduleForm';
+import getWorkouts from "@api/workouts/getWorkouts";
 
 function SchedulePage() {
     const { workouts, dispatch } = useWorkoutsContext();
@@ -14,10 +14,9 @@ function SchedulePage() {
 
     useEffect(() => {
         const fetchWorkouts = async () => {
-            const response = await axios.get('http://localhost:4000/api/workouts');
-            const data = response.data;
+            const data = await getWorkouts();
 
-            if (data) {
+            if (!data.error) {
                 dispatch({
                     type: 'SET_WORKOUT',
                     payload: data
@@ -33,7 +32,7 @@ function SchedulePage() {
             {/* Left Section: Workout Schedule */}
             <div className="w-full md:w-1/2 bg-white rounded-2xl shadow-md p-6 mb-4 md:mb-0">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-2xl font-bold mb-4">Workout Schedule</h2>
+                    <Link className="text-2xl font-bold mb-4" to={'/'}>Workout Schedule</Link>
                     <Link
                         className="w-10 h-10 text-xl flex items-center justify-center rounded-full bg-blue-500 text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-400"
                         to={'/'}
